@@ -1,0 +1,25 @@
+buildscript {
+    Repo.addRepos(repositories)
+    dependencies {
+        classpath Deps.gradlePlugin
+        classpath Deps.kotlinGradlePlugin
+        classpath Deps.gradleVersionsPlugin
+    }
+}
+
+apply plugin: "com.github.ben-manes.versions"
+
+allprojects {
+    Repo.addRepos(repositories)
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+dependencyUpdates {
+    gradleReleaseChannel = "current"
+    rejectVersionIf {
+        Deps.isNonStable(it.candidate.version)
+    }
+}
